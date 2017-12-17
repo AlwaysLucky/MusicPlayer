@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+    <title>理想</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/6.0.0/normalize.min.css">
+    <style>
+    	audio{
+    		width: 100%
+    	}
+    	#container{
+    		text-align: center;
+    		font-size: 1.4rem
+    	}
+    </style>
+</head>
+
+<body>
+
+	<audio src="http://music.163.com/song/media/outer/url?id=29567189.mp3" autoplay="true" loop="true" controls></audio>
+	<div id="container">
+		
+
+	</div>
+
+
+
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+    $(function() {
+        var request = {
+            type: 'lyric',
+            id: 29567189
+        };
+        $.get('https://api.imjad.cn/cloudmusic/', request, function(data) {
+            // console.log(data.lrc.lyric);
+            parseLyric(data.lrc.lyric);
+        })
+    });
+
+    var lyric ;
+    function parseLyric(text) {
+        //将文本分隔成一行一行，存入数组
+        var lines = text.split('\n'),
+            //用于匹配时间的正则表达式，匹配的结果类似[xx:xx.xx]
+            pattern = /\[\d{2}:\d{2}.\d{2,4}\]/g,
+            pattern2 = /[\u4e00-\u9fa5]+/g,
+            //保存最终结果的数组
+            result = [];
+        //去掉不含时间的行
+        while (!pattern.test(lines[0])) {
+            lines = lines.slice(1);
+        };
+        //上面用'\n'生成生成数组时，结果中最后一个为空元素，这里将去掉
+        lines[lines.length - 1].length === 0 && lines.pop();
+        lines.forEach(function(v, i, a) {
+            //提取出时间[xx:xx.xx]
+            var time = v.match(pattern),
+	            //提取歌词
+                value = v.replace(pattern, '');
+            //因为一行里面可能有多个时间，所以time有可能是[xx:xx.xx][xx:xx.xx][xx:xx.xx]的形式，需要进一步分隔
+            time.forEach(function(v1, i1, a1) {
+                //去掉时间里的中括号得到xx:xx.xx
+                var t = v1.slice(1, -1).split(':');
+                //将结果压入最终数组
+                result.push([parseInt(t[0], 10) * 60 + parseFloat(t[1]), value]);
+            });
+        });
+        //最后将结果数组中的元素按时间大小排序，以便保存之后正常显示歌词
+        result.sort(function(a, b) {
+            return a[0] - b[0];
+        });
+        lyric = result;
+        return result;
+    }
+
+    
+    var audio = document.querySelector('audio'),//获取页面上的audio标签
+        lyricContainer = document.querySelector('#container');//显示歌词的元素
+    audio.ontimeupdate = function(e) {//监听ontimeupdate事件
+    	console.log('1');
+        //遍历所有歌词，看哪句歌词的时间与当然时间吻合
+        for (var i = 0, l = lyric.length; i < l; i++) {
+        	/*当前播放的时间*/
+            if (this.currentTime > lyric[i][0]) {
+                //显示到页面
+                lyricContainer.textContent = lyric[i][1];
+            };
+        };
+    };
+
+    </script>
+</body>
+
+</html>
