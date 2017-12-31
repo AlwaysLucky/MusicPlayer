@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+    <title>理想</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <style>
+    * {
+        padding: 0;
+        margin: 0;
+        transition: all .3s;
+    }
+
+    html,
+    body {
+        height: 100%;
+    }
+
+    body {
+        background: #fb717e;
+        font-family: 'Microsoft Yahei';
+        position: relative;
+        overflow: hidden;
+    }
+
+    audio {
+        width: 100%;
+        display: none;
+    }
+
+    #container {
+        text-align: center;
+        font-size: 1.4rem;
+        height: 100%
+    }
+
+    #container .head img {
+        border-radius: 100%;
+        /*-webkit-animation: circle 10s 1.3s linear infinite;*/
+        /*animation: circle 10s 1.3s linear infinite;*/
+    }
+
+    #content {
+        color: white;
+        overflow: auto;
+    }
+
+    .head .ani {
+        -webkit-animation: circle 10s 1.3s linear infinite;
+        animation: circle 10s 1.3s linear infinite;
+    }
+
+    .head .ani.stop {
+        -webkit-animation-play-state: paused;
+        animation-play-state: paused;
+    }
+
+    header h3,
+    header h4 {
+        padding: 10px 0;
+        opacity: 0;
+        color: #f60018
+    }
+
+    header h3 {}
+
+    span {
+        position: absolute;
+        display: inline-block;
+        white-space: nowrap;
+    }
+
+    @-webkit-keyframes circle {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes circle {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+
+    .animated {
+        animation-duration: 1.5s;
+    }
+
+    span.animated {
+        animation-duration: 2.5s;
+    }
+
+    header h3.animated {
+        animation-duration: 6s;
+        animation-delay: 3s
+    }
+
+    header h4:nth-child(2) {
+        animation-delay: .4s
+    }
+
+    header h4:nth-child(3) {
+        animation-delay: 1s
+    }
+
+    header h4:nth-child(4) {
+        animation-delay: 2s
+    }
+
+    header h4:nth-child(5) {
+        animation-delay: 3s
+    }
+    </style>
+</head>
+
+<body>
+    <!-- <audio src="http://music.163.com/song/media/outer/url?id=29567189.mp3" loop="true" controls></audio> -->
+    <!-- <audio src="http://music.163.com/song/media/outer/url?id=29567189.mp3" loop="true" controls></audio> -->
+    <audio src="http://music.163.com/song/media/outer/url?id=392605.mp3" loop="true" controls></audio>
+    <!--生日快乐-->
+    <div id="container">
+        <header>
+            <h3 class="animated bounceInUp">李美霞生日快乐</h3>
+            <h4 class="animated bounceInLeft">今天是</h4>
+            <h4 class="animated bounceInRight">李美霞的生日</h4>
+            <h4 class="animated bounceInLeft">在这里</h4>
+            <h4 class="animated bounceInRight">我们祝他生日快乐</h4>
+        </header>
+        <br/>
+        <div class="head">
+            <!-- <img src="img/zhen1.jpg" alt="" width="50%"> -->
+            <img src="img/lmx.jpg" alt="" width="50%;">
+        </div>
+        <div id="content"></div>
+    </div>
+    <script src="js/zepto.min.js"></script>
+    <script src="js/touch.js"></script>
+    <script src="js/event.js"></script>
+    <script>
+    var img = document.querySelector('.head img');
+    var flag = true;
+    var interval;
+    $(function() {
+        img.className = 'ani';
+        var request = {
+            type: 'lyric',
+            // id: 29567189
+            id: 392605
+        };
+        $.get('https://api.imjad.cn/cloudmusic/', request, function(data) {
+            parseLyric(data.lrc.lyric);
+        })
+    });
+
+    var lyric;
+
+    function parseLyric(text) {
+        //将文本分隔成一行一行，存入数组
+        var lines = text.split('\n'),
+            //用于匹配时间的正则表达式，匹配的结果类似[xx:xx.xx]
+            pattern = /\[\d{2}:\d{2}.\d{2,4}\]/g,
+            pattern2 = /[\u4e00-\u9fa5]+/g,
+            //保存最终结果的数组
+            result = [];
+        //去掉不含时间的行
+        while (!pattern.test(lines[0])) {
+            lines = lines.slice(1);
+        };
+        //上面用'\n'生成生成数组时，结果中最后一个为空元素，这里将去掉
+        lines[lines.length - 1].length === 0 && lines.pop();
+        lines.forEach(function(v, i, a) {
+            //提取出时间[xx:xx.xx]
+            var time = v.match(pattern),
+                //提取歌词
+                value = v.replace(pattern, '');
+            //因为一行里面可能有多个时间，所以time有可能是[xx:xx.xx][xx:xx.xx][xx:xx.xx]的形式，需要进一步分隔
+            time.forEach(function(v1, i1, a1) {
+                //去掉时间里的中括号得到xx:xx.xx
+                var t = v1.slice(1, -1).split(':');
+                //将结果压入最终数组
+                result.push([parseInt(t[0], 10) * 60 + parseFloat(t[1]), value]);
+            });
+        });
+        //最后将结果数组中的元素按时间大小排序，以便保存之后正常显示歌词
+        result.sort(function(a, b) {
+            return a[0] - b[0];
+        });
+        lyric = result;
+        return result;
+    }
+
+
+    var audio = document.querySelector('audio'), //获取页面上的audio标签
+        lyricContainer = document.querySelector('#content'); //显示歌词的元素
+    fragment = document.createDocumentFragment();
+    audio.ontimeupdate = function(e) { //监听ontimeupdate事件
+        //遍历所有歌词，看哪句歌词的时间与当然时间吻合
+        lyricContainer.innerHTML = '';
+        for (var i = 0, l = lyric.length; i < l; i++) {
+            /*当前播放的时间*/
+            if (this.currentTime >= lyric[i][0]) {
+                //显示到页面
+                // lyricContainer.textContent = lyric[i][1];
+                // var line = document.createElement('p');
+                // line.id = 'line-'+i;
+                // line.textContent = lyric[i][1];
+                // fragment.appendChild(line);
+                // lyricContainer.appendChild(fragment);
+            };
+        };
+    };
+
+    $(img).tap(function() {
+        if (flag) {
+            flag = !flag;
+            img.classList.add('stop');
+            // img.src = "img/img"+random+".jpg";
+            audio.pause();
+        } else {
+            flag = !flag;
+            img.classList.remove('stop');
+            // img.src = "img/img"+random+".jpg";
+            audio.play();
+        }
+    });
+    $(img).swipeLeft(function() {
+        var ptn = /\d/;
+        var imgSrc = $(this)[0].src.split('\/')[4].split('.')[0];
+        var arr = ptn.exec(imgSrc);
+        if (!ptn.test(imgSrc)) return ;
+        var num = parseInt(arr[0]) + 1;
+        if (arr[0] == 3) num = 1;
+        $(this)[0].src = "./img/zhen" + num + ".jpg";
+    });
+    $(img).swipeRight(function() {
+        var ptn = /\d/;
+        var imgSrc = $(this)[0].src.split('\/')[4].split('.')[0];
+        var arr = ptn.exec(imgSrc);
+        if (!ptn.test(imgSrc)) return ;
+        var num = parseInt(arr[0]) - 1;
+        if (arr[0] == 1) num = 3;
+        $(this)[0].src = "./img/zhen" + num + ".jpg";
+    })
+
+    setTimeout(function() {
+        audio.play();
+    }, 4000);
+
+    (function() {
+        setInterval(function() {
+            var stylesOut = ['bounceOut', 'bounceOutDown', 'bounceOutUp', 'bounceOutLeft', 'bounceOutRight', 'slideOutDown', 'slideOutUp', 'slideOutLeft', 'slideOutRight', 'zoomOut', 'zoomOutDown', 'zoomOutUp', 'zoomOutRight', 'zoomOutLeft'];
+            var styleColors = ['DeepPink', '#4B0082', '#0000CD', 'Yellow', 'Red', '#DC143C', '#00FFFF', '	#7FFFD4'];
+            var stRandom = Math.floor(Math.random() * stylesOut.length);
+            var poRandom = Math.floor(Math.random() * 100);
+            var coRandom = Math.floor(Math.random() * styleColors.length);
+            var span = document.createElement('span');
+            span.className = 'animated ' + stylesOut[stRandom];
+            span.textContent = '生日快乐';
+            span.style.top = poRandom + "%";
+            span.style.left = (poRandom / 2 + 40) + "%";
+            span.style.fontSize = stRandom / 3 + 'rem';
+            span.style.color = styleColors[coRandom];
+            document.body.appendChild(span);
+        }, 800);
+    })();
+    </script>
+</body>
+
+</html>

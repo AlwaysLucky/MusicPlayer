@@ -7,23 +7,23 @@
     <title>理想</title>
     <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/6.0.0/normalize.min.css">
     <style>
-    	audio{
-    		width: 100%
-    	}
-    	#container{
-    		text-align: center;
-    		font-size: 1.4rem
-    	}
+        audio{
+            width: 100%
+        }
+        #container{
+            text-align: center;
+            font-size: 1.4rem
+        }
     </style>
 </head>
 
 <body>
 
-	<audio src="http://music.163.com/song/media/outer/url?id=29567189.mp3" autoplay="true" loop="true" controls></audio>
-	<div id="container">
-		
+    <audio src="http://music.163.com/song/media/outer/url?id=29567189.mp3" autoplay="true" loop="true" controls></audio>
+    <div id="container">
+        
 
-	</div>
+    </div>
 
 
 
@@ -58,7 +58,7 @@
         lines.forEach(function(v, i, a) {
             //提取出时间[xx:xx.xx]
             var time = v.match(pattern),
-	            //提取歌词
+                //提取歌词
                 value = v.replace(pattern, '');
             //因为一行里面可能有多个时间，所以time有可能是[xx:xx.xx][xx:xx.xx][xx:xx.xx]的形式，需要进一步分隔
             time.forEach(function(v1, i1, a1) {
@@ -80,10 +80,10 @@
     var audio = document.querySelector('audio'),//获取页面上的audio标签
         lyricContainer = document.querySelector('#container');//显示歌词的元素
     audio.ontimeupdate = function(e) {//监听ontimeupdate事件
-    	console.log('1');
+        console.log('1');
         //遍历所有歌词，看哪句歌词的时间与当然时间吻合
         for (var i = 0, l = lyric.length; i < l; i++) {
-        	/*当前播放的时间*/
+            /*当前播放的时间*/
             if (this.currentTime > lyric[i][0]) {
                 //显示到页面
                 lyricContainer.textContent = lyric[i][1];
