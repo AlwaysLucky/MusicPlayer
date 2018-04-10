@@ -7,26 +7,52 @@
     <title>理想</title>
     <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/6.0.0/normalize.min.css">
     <style>
-        audio{
-            width: 100%
-        }
-        #container{
-            text-align: center;
-            font-size: 1.4rem
-        }
+    * {
+        padding: 0;
+        margin: 0;
+    }
+	html,body{
+		height: 100%;
+
+	}
+    body {
+        /*background: #00484b;*/
+		background: url('./bg.jpg') no-repeat;
+		background-position: 50%;
+		background-size: auto 100%;
+        font-family: 'Microsoft Yahei'
+    }
+
+    audio {
+        width: 100%
+    }
+
+    #container {
+        height: 100%;
+        box-sizing: border-box;
+        text-align: center;
+        font-size: 1rem;
+        padding: 8em 0 4em 0;
+        color: hsla(0,0%,100%,.6)
+    }
+	ul{
+		position: relative;
+		height: 100%;
+        overflow: scroll;
+	}
+    ul li {
+        padding-bottom: 5px;
+    }
+
+    .actived {
+        color: #fefefe;
+    }
     </style>
 </head>
 
 <body>
-
-    <audio src="http://music.163.com/song/media/outer/url?id=29567189.mp3" autoplay="true" loop="true" controls></audio>
-    <div id="container">
-        
-
-    </div>
-
-
-
+    <audio src="http://music.163.com/song/media/outer/url?id=29567189.mp3" autoplay controls hidden></audio>
+    <div id="container"></div>
     <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
     <script>
     $(function() {
@@ -35,12 +61,21 @@
             id: 29567189
         };
         $.get('https://api.imjad.cn/cloudmusic/', request, function(data) {
-            // console.log(data.lrc.lyric);
             parseLyric(data.lrc.lyric);
+            // console.log(lyric);
+            var ul = document.createElement('ul');
+
+            lyric.forEach(function(e, i) {
+                var li = document.createElement('li');
+                li.textContent = e[1];
+                ul.append(li);
+            })
+            document.querySelector('#container').append(ul);
         })
     });
 
-    var lyric ;
+    var lyric;
+
     function parseLyric(text) {
         //将文本分隔成一行一行，存入数组
         var lines = text.split('\n'),
@@ -76,21 +111,37 @@
         return result;
     }
 
-    
-    var audio = document.querySelector('audio'),//获取页面上的audio标签
-        lyricContainer = document.querySelector('#container');//显示歌词的元素
-    audio.ontimeupdate = function(e) {//监听ontimeupdate事件
-        console.log('1');
+
+    var audio = document.querySelector('audio'), //获取页面上的audio标签
+        lyricContainer = document.querySelector('#container'); //显示歌词的元素
+    audio.ontimeupdate = function(e) { //监听ontimeupdate事件
+        ulHeight = document.querySelector('ul').offsetHeight;
+        // conHeight = lyricContainer.offsetHeight;
         //遍历所有歌词，看哪句歌词的时间与当然时间吻合
+
         for (var i = 0, l = lyric.length; i < l; i++) {
             /*当前播放的时间*/
-            if (this.currentTime > lyric[i][0]) {
+            if (parseInt(this.currentTime) == parseInt(lyric[i][0])) {
                 //显示到页面
-                lyricContainer.textContent = lyric[i][1];
+                // lyricContainer.textContent = lyric[i][1];
+                $('ul li').removeClass('actived');
+                var li = $('ul li').eq(i);
+                li.addClass('actived');
+
+                // var liHeight = li[0].offsetTop;
+                $('ul li').get(0).style.marginTop = -(i)*23+'px';
+
+                // if (liHeight >= (ulHeight / 2)) {
+                	//超过一半了
+                    // console.log('conHeight'+conHeight);
+                    // var tmp = lyricContainer.scrollTop+18;
+                    // lyricContainer.scrollTop = liHeight;
+                    // lyricContainer.scrollTop = tmp;
+                // }
+
             };
         };
     };
-
     </script>
 </body>
 

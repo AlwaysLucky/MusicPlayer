@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="ani.css">
+    <style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    html,body {
+        height: 100%;
+        font-size: 14px;
+    }
+
+    body {
+        background: url('素材 2.png');
+        background-size: contain;
+
+        font-family: '微软雅黑';
+    }
+
+    .container {
+        height: 100%;
+        /*border: 1px solid red;*/
+    }
+
+    .header {
+        padding-left: 30px;
+    }
+
+    .header img {
+        margin-top: 20px;
+        width: 35%;
+    }
+
+    .logo {
+        text-align: center;
+    }
+
+    .logo img {
+        width: 90%;
+    }
+
+    .content {
+        position: relative;
+
+        box-sizing: border-box;
+        width: 80%;
+        margin-left: 10%;
+        background: white;
+        text-indent: 30px;
+        padding: 10px 20px;
+
+        border: 10px solid #182d62;
+        border-radius: 10px;
+
+        font-weight: bold;
+    }
+
+    .content p {
+        text-align: center;
+        text-indent: 0;
+        margin: 5px 0;
+    }
+
+    .content p span {
+        display: inline-block;
+        padding: 5px 50px;
+        border-radius: 20px;
+    }
+
+    p span:hover {
+        background: yellow;
+    }
+
+    .titlelogo {
+        position: absolute;
+        /*display: inline-block;*/
+        top: 0;
+        left: 0;
+        width: 50px;
+        text-indent: 0;
+        text-align: left;
+    }
+
+    .titlelogo img {
+
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .number {
+    	box-sizing: border-box;
+        width: 80%;
+        margin-left: 10%;
+
+        border: 7px solid #182d62;
+        margin-top: 10px;
+        border-radius:10px;
+    }
+    .number input{
+    	width: 98%;
+    	padding-top: 5px;
+    	padding-left: 5px;
+    	padding-bottom: 5px;
+    	border-radius: 10px;
+
+    }
+    .tjxx{
+    	box-sizing: border-box;
+    	width: 80%;
+    	height: 5%;
+    	background-color: #182d62;
+    	border: 0px;
+    	border-radius: 10px;
+    	margin-left: 10%;
+    	margin-top: 10px;
+    	color: #FFF;
+    	letter-spacing: 10px;
+    }
+    .foot{
+    	margin-top: 30px;
+    }
+    .foot img{
+		text-align: center;
+		width: 100%;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <dvi class="header">
+            <img src="素材 3.png" alt="">
+        </dvi>
+        <div class="logo animated shake">
+            <img src="素材 4.png" alt="">
+            <img src="素材 5.png" alt="">
+        </div>
+        <div class="content">
+            大年初一,小明去姑姑家串门,从1楼走到3楼要6分钟哦,现在从1楼走到6楼,要多少分钟?
+            <p><span>A.12分钟</span></p>
+            <p><span class="highLight">B.15分钟</span></p>
+            <p><span>C.18分钟</span></p>
+            <div class="titlelogo">
+                <img src="素材 6.png" alt="">
+            </div>
+        </div>
+        <div class="number">
+            <input type="text" name="" placeholder="输入学而思学员编号或手机号" >
+        </div>
+       
+       	<button class="tjxx">提交信息</button>
+       <div class="foot">
+       	<img src="素材 8.png">
+       </div>
+    </div>
+</body>
+
+
+</html>

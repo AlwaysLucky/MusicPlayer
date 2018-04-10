@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>test</title>
+</head>
+<body>
+	
+<h1 align=center><a href="test2.html">go to</a></h1>
+
+<script>
+	window.onload = function(){
+
+		if (sessionStorage.myAge) {
+			alert(sessionStorage.myAge);
+		}
+
+		var tag = 0;
+		setInterval(function(){
+			console.log(1);
+			var body = document.body;
+
+			body.style.background = "url('img/lmx.jpg') center "+(tag)+'px';
+			tag++;
+		},100)
+
+	}
+</script>
+</body>
+</html>
