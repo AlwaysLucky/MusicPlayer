@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
     <title>理想</title>
     <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="css/base.css">
     <style>
     * {
         padding: 0;
@@ -73,11 +74,15 @@
         -webkit-animation: run 20s .3s linear infinite;
         animation: run 20s .3s linear infinite;
     }
+
     .picker.ani.stop {
         -webkit-animation-play-state: paused;
-                animation-play-state: paused;
+        animation-play-state: paused;
     }
-
+    .swal-icon--custom img{
+        width: 25%;
+        border-radius: 50%;
+    }
     @keyframes run {
         0% {
             transform: rotate(0deg);
@@ -90,13 +95,14 @@
 </head>
 
 <body>
-    <audio src="http://music.163.com/song/media/outer/url?id=28234970.mp3" autoplay controls hidden></audio>
+    <audio src="http://music.163.com/song/media/outer/url?id=28234970.mp3" controls hidden></audio>
     <div id="container">
         <div class="picker">
             <!-- <img src="./m1.jpg" alt="" width="100%"> -->
         </div>
     </div>
     <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="js/sweetalert.min.js"></script>
     <script>
     var audio, lyricContainer, lyric;
 
@@ -105,7 +111,30 @@
         lyricContainer = document.querySelector('#container'); //显示歌词的元素
         var picker = document.querySelector('.picker');
         var flag = true;
-        picker.classList.add('ani');
+        audio.addEventListener('canplay', function() {
+            picker.classList.add('ani');
+            this.play();
+        })
+
+        audio.addEventListener('ended', function() {
+            swal({
+                title: "瑞瑞同学",
+                text: "路途遥远 我们在一起吧!",
+                icon: "m1.jpg",
+                buttons: ['残忍拒绝','没戏'],
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    swal("不存在的!", {
+                        icon: "success",
+                    });
+                } else {
+                    swal("那是不可能的!");
+                }
+            });
+        })
+
         $(function() {
             var request = {
                 type: 'lyric',
