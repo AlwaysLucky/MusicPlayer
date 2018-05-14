@@ -57,25 +57,26 @@
     .picker {
         position: relative;
         margin: 2em 0;
-        /*top:calc(50vh - 30vw);*/
-        /*top:0;*/
         left: 20%;
-
         width: 60%;
         height: 60vw;
+    }
+    .picker .imger{
+        height: 100%;
         overflow: hidden;
         border-radius: 50%;
-        background: url('m1.jpg') no-repeat;
+
+        background-image: url('./m1.jpg');
         background-size: 100%;
-        background-position: center center;
+        background-position: center top;
     }
 
-    .picker.ani {
+    .picker .imger.ani {
         -webkit-animation: run 20s .3s linear infinite;
         animation: run 20s .3s linear infinite;
     }
 
-    .picker.ani.stop {
+    .picker .ani.stop {
         -webkit-animation-play-state: paused;
         animation-play-state: paused;
     }
@@ -83,6 +84,7 @@
         width: 25%;
         border-radius: 50%;
     }
+
     @keyframes run {
         0% {
             transform: rotate(0deg);
@@ -98,7 +100,9 @@
     <audio src="http://music.163.com/song/media/outer/url?id=28234970.mp3" controls hidden></audio>
     <div id="container">
         <div class="picker">
-            <!-- <img src="./m1.jpg" alt="" width="100%"> -->
+            <div class="imger">
+                <!-- <img src="./m1.jpg" alt="" width="100%"> -->
+            </div>
         </div>
     </div>
     <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -110,9 +114,10 @@
         audio = document.querySelector('audio'); //获取页面上的audio标签
         lyricContainer = document.querySelector('#container'); //显示歌词的元素
         var picker = document.querySelector('.picker');
+        var img = document.querySelector('.picker .imger');
         var flag = true;
         audio.addEventListener('canplay', function() {
-            picker.classList.add('ani');
+            img.classList.add('ani');
             this.play();
         })
 
@@ -186,20 +191,26 @@
         };
 
         picker.addEventListener('touchstart', touch, false);
-        picker.addEventListener('touchend', touch, false);
+        // picker.addEventListener('touchend', touch, false);
 
         function touch(e) {
             var e = e || window.event;
             switch (e.type) {
                 case "touchstart":
-                    var random = Math.floor(Math.random() * 8 + 1);
                     if (flag) {
                         flag = !flag;
-                        picker.classList.add('stop');
                         audio.pause();
+
+                       var iTransform = getComputedStyle(img).transform;
+                       var cTransform = getComputedStyle(picker).transform;
+
+                       picker.style.transform = cTransform === 'none' ? iTransform : iTransform.concat(' ', cTransform);
+
+                        img.classList.remove('ani');
+                       
                     } else {
                         flag = !flag;
-                        picker.classList.remove('stop');
+                        img.classList.add('ani');
                         audio.play();
                     }
                     break;
