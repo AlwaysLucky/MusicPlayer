@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
-    <title>理想</title>
+    <title>想把我唱给你听</title>
     <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/6.0.0/normalize.min.css">
     <link rel="stylesheet" href="css/base.css">
     <style>
@@ -84,7 +84,47 @@
         width: 25%;
         border-radius: 50%;
     }
+    .mask-container,.mask{
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: rgba(0,0,0,.8);
+        color: #fff;
+    }
 
+    .mask{
+        background: none;
+        width: 100%;
+        height: 200px;
+        text-align: center;
+        line-height: 200px;
+        margin: auto;
+        font-size: 2em;
+    }
+    dot{
+        display: inline-block;
+        height: 1em;
+        line-height: 1;
+        text-align: left;
+        vertical-align: -.25em;
+        overflow: hidden;
+    }
+    dot:before{
+        display: block;
+        content: '...\A..\A.';
+        white-space: pre-wrap;
+        animation: dot 3s infinite step-start both;
+    }
+    @keyframes dot{
+        33% {
+            transform: translateY(-2em);
+        }
+        66% {
+            transform: translateY(-1em);
+        }
+    }
     @keyframes run {
         0% {
             transform: rotate(0deg);
@@ -107,6 +147,17 @@
             <ul></ul>
         </div>
     </div>
+
+    <div class="mask-container">
+        <div class="mask">
+            <span>正在加载</span><dot>...</dot>
+        </div>
+    </div>
+    <img src="img/img1.jpg" alt=""  style="display: none">
+    <img src="img/img2.jpg" alt=""  style="display: none">
+    <img src="img/img3.jpg" alt=""  style="display: none">
+    <img src="img/img4.jpg" alt=""  style="display: none">
+    <img src="img/img5.jpg" alt=""  style="display: none">
     <!-- <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script> -->
     <script src="js/zepto.min.js"></script>
     <script src="js/sweetalert.min.js"></script>
@@ -114,24 +165,24 @@
     <script src="js/event.js"></script>
     <script>
     var audio, lyricContainer, lyric;
+    var mask = document.querySelector('.mask-container');
     var picker = document.querySelector('.picker');
     var imger = document.querySelector('.imger');
     var flag = true;
     var songIds = ['28234970', '399555109', '130843', '33756016', '5356944', '95410', '25640286', '29567189'];
 
     window.onload = function() {
+        mask.style.display = "none";
         audio = document.querySelector('audio'); //获取页面上的audio标签
         lyricContainer = document.querySelector('#container'); //显示歌词的元素
         audio.addEventListener('canplay', function() {
             imger.classList.add('ani');
             this.play();
         })
-        audio.addEventListener('ended', say);
+        // audio.addEventListener('ended', say);
 
         $(function() {
-            let rad = parseInt(Math.random()*8);
-            audio.src = parseAudioSrc(songIds[rad]);
-            getLrc(songIds[rad]);
+            init()
         });
 
         audio.ontimeupdate = function(e) { //监听ontimeupdate事件
@@ -265,6 +316,7 @@
         if (imgNum ==5 ) return ;
         imgNum++;
         this.style.backgroundImage = 'url(./img/img'+imgNum+'.jpg)';
+        init();
     })
 
     $(imger).swipeRight(function(){
@@ -276,6 +328,7 @@
         if (imgNum ==1 ) return ;
         imgNum--;
         this.style.backgroundImage = 'url(./img/img'+imgNum+'.jpg)';
+        init();
     })
 
     $(imger).tap(function(e){
@@ -296,6 +349,12 @@
             audio.play();
         }
     })
+
+    function init(){
+        let rad = parseInt(Math.random()*8);
+        audio.src = parseAudioSrc(songIds[rad]);
+        getLrc(songIds[rad]);
+    }
 
     </script>
 </body>
