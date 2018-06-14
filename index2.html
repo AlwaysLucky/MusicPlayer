@@ -21,8 +21,8 @@
 
     body {
         background: url('./bg.jpg') no-repeat;
-        background-position: 50%;
-        background-size: auto 100%;
+        background-position: center;
+        background-size: cover;
         font-family: 'Microsoft Yahei'
     }
 
@@ -56,8 +56,7 @@
 
     .picker {
         position: relative;
-        margin: 2em 0;
-        left: 20%;
+        margin: 2em auto;
         width: 60%;
         height: 60vw;
     }
@@ -133,6 +132,14 @@
             transform: rotate(360deg);
         }
     }
+    
+    @media screen and (min-width: 500px){
+        .picker{
+            max-width: 333px;
+            height: 333px;
+        }
+    }
+
     </style>
 </head>
 
@@ -166,6 +173,7 @@
     <script>
     var audio, lyricContainer, lyric;
     var mask = document.querySelector('.mask-container');
+    lyricContainer = document.querySelector('#container'); //显示歌词的元素
     var picker = document.querySelector('.picker');
     var imger = document.querySelector('.imger');
     var flag = true;
@@ -174,7 +182,6 @@
     window.onload = function() {
         mask.style.display = "none";
         audio = document.querySelector('audio'); //获取页面上的audio标签
-        lyricContainer = document.querySelector('#container'); //显示歌词的元素
         audio.addEventListener('canplay', function() {
             imger.classList.add('ani');
             this.play();
@@ -307,27 +314,27 @@
         });
     }
 
-    $(imger).swipeLeft(function(){
-        var imgUrl = window.getComputedStyle(this).backgroundImage;
+    $(lyricContainer).swipeLeft(function(){
+        var imgUrl = window.getComputedStyle(imger).backgroundImage;
         var ptn = /(\w)+\.jpg/g;
         var arr = ptn.exec(imgUrl);
         var imgName = arr[0];
         var imgNum = imgName.split('.')[0].split('img')[1];
         if (imgNum ==5 ) return ;
         imgNum++;
-        this.style.backgroundImage = 'url(./img/img'+imgNum+'.jpg)';
+        imger.style.backgroundImage = 'url(./img/img'+imgNum+'.jpg)';
         init();
     })
 
-    $(imger).swipeRight(function(){
-        var imgUrl = window.getComputedStyle(this).backgroundImage;
+    $(lyricContainer).swipeRight(function(){
+        var imgUrl = window.getComputedStyle(imger).backgroundImage;
         var ptn = /(\w)+\.jpg/g;
         var arr = ptn.exec(imgUrl);
         var imgName = arr[0];
         var imgNum = imgName.split('.')[0].split('img')[1];
         if (imgNum ==1 ) return ;
         imgNum--;
-        this.style.backgroundImage = 'url(./img/img'+imgNum+'.jpg)';
+        imger.style.backgroundImage = 'url(./img/img'+imgNum+'.jpg)';
         init();
     })
 
