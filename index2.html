@@ -103,6 +103,14 @@
         animation: dot 3s infinite step-start both;
     }
 
+    .imger-mask {
+        position: absolute;
+        display: none;
+        left: 0;right: 0;top: 0;bottom: 0;
+        text-indent: -9999px;
+        background: rgba(0,0,0,.5) url(img/min/play.png) no-repeat center/30%
+    }
+
     @keyframes dot {
         33% {
             transform: translateY(-2em);
@@ -146,6 +154,7 @@
             <dot>...</dot>
         </div>
     </div>
+    <div class="imger-mask">图片蒙层 微信浏览器无法自动播放 需手动触发</div>
     <img src="img/min/img1.jpg" alt="" style="display: none">
     <img data-src="img/min/img2.jpg" alt="" style="display: none">
     <img data-src="img/min/img3.jpg" alt="" style="display: none">
@@ -157,14 +166,24 @@
     <script>
     var audio, lyricContainer, lyric;
     var mask = document.querySelector('.mask-container');
-    lyricContainer = document.querySelector('#container'); //显示歌词的元素
+    lyricContainer = document.querySelector('#container');
     var picker = document.querySelector('.picker');
     var imger = document.querySelector('.imger');
     var flag = true;
     var songIds = ['28234970', '399555109', '130843', '33756016', '5356944', '95410', '29567189'];
 
     window.onload = function() {    
-        mask.style.display = "none";
+        mask.style.display = "none"; //loading 动画隐藏
+        /*微信浏览器处理*/
+        var ua = window.navigator.userAgent.toLowerCase();
+        if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+            document.querySelector('.imger-mask').style.display = 'block'
+            $('.imger-mask').tap(function(){
+                document.querySelector('.imger-mask').style.display = 'none';
+                $(imger).trigger('tap');
+            })
+        }
+
         audio = document.querySelector('audio'); //获取页面上的audio标签
         init();
         loadImages();
@@ -216,7 +235,6 @@
         //             break;
         //     }
         // }
-
     }
 
     function parseLyric(text) {
