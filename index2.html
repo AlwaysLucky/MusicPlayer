@@ -169,7 +169,8 @@
     lyricContainer = document.querySelector('#container');
     var picker = document.querySelector('.picker');
     var imger = document.querySelector('.imger');
-    var flag = false;
+    var flag = true;
+    var isWX = false;
     var songIds = ['28234970', '399555109', '130843', '33756016', '5356944', '95410', '29567189'];
 
     window.onload = function() {    
@@ -177,7 +178,9 @@
         /*微信浏览器处理*/
         var ua = window.navigator.userAgent.toLowerCase();
         if(ua.match(/MicroMessenger/i) == 'micromessenger'){
-            document.querySelector('.imger-mask').style.display = 'block'
+            flag = false ;
+            isWX = true;
+            document.querySelector('.imger-mask').style.display = 'block';
             $('.imger-mask').tap(function(){
                 document.querySelector('.imger-mask').style.display = 'none';
                 $(imger).trigger('tap');
@@ -186,11 +189,7 @@
 
         audio = document.querySelector('audio'); //获取页面上的audio标签
         init();
-        loadImages();
-        audio.addEventListener('canplay', function() {
-            imger.classList.add('ani');
-            this.play();
-        })
+        loadImages(); //加载预留图片
 
         audio.ontimeupdate = function(e) { //监听ontimeupdate事件
             //遍历所有歌词，看哪句歌词的时间与当然时间吻合
@@ -207,7 +206,13 @@
                 };
             };
         };
-
+        audio.addEventListener('canplay', function(){
+            if (isWX) return ;
+            setTimeout(function(){
+                imger.classList.add('ani');
+                audio.play();
+            },400)
+        });
         audio.addEventListener('ended',turnSong); //播放结束自动切换
 
         // picker.addEventListener('touchend', touch, false);
@@ -318,6 +323,7 @@
         imgNum++;
         imger.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
         init();
+        audio.play();
     })
 
     $(lyricContainer).swipeRight(function() {
@@ -330,6 +336,7 @@
         imgNum--;
         imger.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
         init();
+        audio.play();
     })
 
     $(imger).tap(function(e) {
