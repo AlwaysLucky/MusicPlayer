@@ -30,11 +30,16 @@
         font-size: 1rem;
         color: hsla(0, 0%, 100%, .6);
     }
+    #ulcontainer{
+        height: 100%;
+        padding: 40px 0;
+    }
     ul {
         position: relative;
         max-height: 100%;
         padding: 0 20px;
-        overflow: scroll;
+        /*overflow: scroll;*/
+        overflow: hidden;
     }
     ul li {
         padding-bottom: 5px;
@@ -131,9 +136,23 @@
 
     @media screen and (min-width: 500px) {
         .picker {
-            max-width: 333px;
-            height: 333px;
+            position: static;
+            height: 0;
+            margin: 0;
         }
+
+        .picker .imger{
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            max-width: 333px;
+            max-height: 333px;
+            margin: auto;
+        }
+
+
     }
     </style>
 </head>
@@ -200,8 +219,8 @@
                     $('ul li').removeClass('actived');
                     var li = $('ul li').eq(i);
                     li.addClass('actived');
-                    if (i > 3) {
-                        $('ul li').get(0).style.marginTop = -(i - 3) * 23 + 'px';
+                    if (i > 5) {
+                        $('ul li').get(0).style.marginTop = -(i - 5) * 23 + 'px';
                     }
                 };
             };
