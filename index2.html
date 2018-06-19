@@ -22,17 +22,16 @@
         background: url('./bg.jpg') no-repeat;
         background-position: center;
         background-size: cover;
+        font-size: calc(100% + 24 * (100vw - 500px) / 1400)
     }
     #container {
         height: 100%;
         box-sizing: border-box;
         text-align: center;
-        font-size: 1rem;
         color: hsla(0, 0%, 100%, .6);
     }
     #ulcontainer{
         height: 100%;
-        padding: 40px 0;
     }
     ul {
         position: relative;
@@ -40,6 +39,7 @@
         padding: 0 20px;
         /*overflow: scroll;*/
         overflow: hidden;
+        line-height: 2
     }
     ul li {
         padding-bottom: 5px;
@@ -50,9 +50,10 @@
     }
     .picker {
         position: relative;
-        margin: 2em auto;
+        margin: 2rem auto;
         width: 60%;
         height: 60vw;
+        font-size: 0
     }
     .picker .imger {
         height: 100%;
@@ -61,10 +62,20 @@
         background-image: url('./img/min/img1.jpg');
         background-size: 100%;
         background-position: center top;
+        -webkit-filter: drop-shadow(0 1px 5px rgba(0,0,0,.5));
+                filter: drop-shadow(0 1px 5px rgba(0,0,0,.5));
+    }
+    .imger-mask {
+        position: absolute;
+        display: none;
+        left: 0;right: 0;top: 0;bottom: 0;
+        /*border-radius: 50%;*/
+        text-indent: -9999px;
+        background: rgba(0,0,0,.5) url(img/min/play.png) no-repeat center  15vw/30%
     }
     .picker .imger.ani {
-        -webkit-animation: run 20s .3s linear infinite;
-        animation: run 20s .3s linear infinite;
+        -webkit-animation: run 30s .3s linear infinite;
+        animation: run 30s .3s linear infinite;
     }
     .picker .ani.stop {
         -webkit-animation-play-state: paused;
@@ -108,14 +119,6 @@
         animation: dot 3s infinite step-start both;
     }
 
-    .imger-mask {
-        position: absolute;
-        display: none;
-        left: 0;right: 0;top: 0;bottom: 0;
-        text-indent: -9999px;
-        background: rgba(0,0,0,.5) url(img/min/play.png) no-repeat center/30%
-    }
-
     @keyframes dot {
         33% {
             transform: translateY(-2em);
@@ -135,6 +138,9 @@
     }
 
     @media screen and (min-width: 500px) {
+        #ulcontainer{
+            padding: 40px 0;
+        }
         .picker {
             position: static;
             height: 0;
@@ -147,12 +153,17 @@
             top: 0;
             right: 0;
             bottom: 0;
-            max-width: 333px;
-            max-height: 333px;
+            max-width: 600px;
+            max-height: 600px;
             margin: auto;
         }
+    }
 
-
+    @media screen and (orientation: landscape){ /*横屏*/
+        .picker .imger{
+            max-width: 80vh;
+            max-height: 80vh
+        }
     }
     </style>
 </head>
@@ -161,7 +172,8 @@
     <audio hidden></audio>
     <div id="container">
         <div class="picker">
-            <div class="imger"></div>
+            <div class="imger">
+            </div>
         </div>
         <div id="ulcontainer">
             <ul></ul>
@@ -190,13 +202,14 @@
     var imger = document.querySelector('.imger');
     var flag = true;
     var isWX = false;
-    var songIds = ['28234970', '399555109', '130843', '33756016', '5356944', '95410', '29567189'];
+    var songIds = ['29431066', '25638240', '27646198', '254574', '490602750', '202373', '35476049'];
 
     window.onload = function() {    
         mask.style.display = "none"; //loading 动画隐藏
         /*微信浏览器处理*/
         var ua = window.navigator.userAgent.toLowerCase();
-        if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+        var isIos = /(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent);
+        if(ua.match(/MicroMessenger/i) == 'micromessenger' && isIos){
             flag = false ;
             isWX = true;
             document.querySelector('.imger-mask').style.display = 'block';
@@ -273,7 +286,7 @@
         while (!pattern.test(lines[0])) {
             lines = lines.slice(1);
         };
-        //上面用'\n'生成生成数组时，结果中最后一个为空元素，这里将去掉
+        //上面用'\n'生成生成数组时，结果中最后一个为空元素，这里将去掉  
         lines[lines.length - 1].length === 0 && lines.pop();
         lines.forEach(function(v, i, a) {
             //提取出时间[xx:xx.xx]
@@ -303,8 +316,6 @@
         };
         $.get('https://api.imjad.cn/cloudmusic/', request, function(data) {
             parseLyric(data.lrc.lyric);
-            // console.log(lyric);
-
             var ul = document.createElement('ul');
             lyric.forEach(function(e, i) {
                 var li = document.createElement('li');
@@ -333,6 +344,7 @@
     }
 
     $(lyricContainer).swipeLeft(function() {
+        imger.classList.remove('ani');
         var imgUrl = window.getComputedStyle(imger).backgroundImage;
         var ptn = /(\w)+\.jpg/g;
         var arr = ptn.exec(imgUrl);
@@ -342,10 +354,11 @@
         imgNum++;
         imger.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
         init();
-        audio.play();
+        // audio.play();
     })
 
     $(lyricContainer).swipeRight(function() {
+        imger.classList.remove('ani');
         var imgUrl = window.getComputedStyle(imger).backgroundImage;
         var ptn = /(\w)+\.jpg/g;
         var arr = ptn.exec(imgUrl);
@@ -355,7 +368,7 @@
         imgNum--;
         imger.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
         init();
-        audio.play();
+        // audio.play();
     })
 
     $(imger).tap(function(e) {
