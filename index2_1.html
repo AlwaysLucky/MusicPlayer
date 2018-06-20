@@ -7,211 +7,13 @@
     <title>想把我唱给你听</title>
     <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/6.0.0/normalize.min.css">
     <link rel="stylesheet" href="css/base.css">
-    <style>
-    * {
-        padding: 0;
-        margin: 0;
-    }
-
-    html,
-    body {
-        height: 100%;
-        overflow: hidden;
-    }
-
-    body {
-        /*background: url('./bg.jpg') no-repeat;*/
-        /*background-position: center;*/
-        /*background-size: cover;*/
-        font-size: calc(100% + 24 * (100vw - 500px) / 1400)
-    }
-
-    #container {
-        height: 100%;
-        box-sizing: border-box;
-        overflow: hidden;
-        text-align: center;
-        color: hsla(0, 0%, 100%, .6);
-        background-color: rgba(7,17,27,.5);
-    }
-
-    #ulcontainer {
-        height: 100%;
-        height: calc(100vh - 60vw - 4rem);
-        padding-bottom: 2rem;
-    }
-
-    ul {
-        position: relative;
-        max-height: 100%;
-        padding: 0 20px;
-        /*overflow: scroll;*/
-        overflow: hidden;
-        line-height: 2
-    }
-
-    ul li {
-        padding-bottom: 5px;
-        list-style: none
-    }
-
-    .actived {
-        color: #fefefe;
-    }
-
-    .picker {
-        position: relative;
-        margin: 2rem auto;
-        width: 60%;
-        height: 60vw;
-        font-size: 0
-    }
-
-    .picker .imger {
-        height: 100%;
-        overflow: hidden;
-        border-radius: 50%;
-        background-image: url('./img/min/img1.jpg');
-        background-size: 100%;
-        background-position: center top;
-        transition: background .4s;
-        -webkit-filter: drop-shadow(0 1px 5px rgba(0, 0, 0, .5));
-        filter: drop-shadow(0 1px 5px rgba(0, 0, 0, .5));
-    }
-
-    .imger-mask {
-        position: absolute;
-        display: none;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        /*border-radius: 50%;*/
-        text-indent: -9999px;
-        background: rgba(0, 0, 0, .5) url(img/min/play.png) no-repeat center/30%
-    }
-
-    .picker .imger.ani {
-        -webkit-animation: run 30s .3s linear infinite;
-        animation: run 30s .3s linear infinite;
-    }
-
-    .picker .ani.stop {
-        -webkit-animation-play-state: paused;
-        animation-play-state: paused;
-    }
-
-    .swal-icon--custom img {
-        width: 25%;
-        border-radius: 50%;
-    }
-
-    .mask-container,
-    .mask {
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        background: rgba(7, 17, 27, .8);
-        color: #fff;
-    }
-
-    .mask {
-        background: none;
-        width: 100%;
-        height: 200px;
-        text-align: center;
-        line-height: 200px;
-        margin: auto;
-        font-size: 2em;
-    }
-    .imgblur{
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        background-image: url(img/img1.jpg);
-        background-repeat: no-repeat;
-        filter: blur(10px);
-        z-index: -1
-    }
-
-    dot {
-        display: inline-block;
-        height: 1em;
-        line-height: 1;
-        text-align: left;
-        vertical-align: -.25em;
-        overflow: hidden;
-    }
-
-    dot:before {
-        display: block;
-        content: '...\A..\A.';
-        white-space: pre-wrap;
-        animation: dot 3s infinite step-start both;
-    }
-
-    @keyframes dot {
-        33% {
-            transform: translateY(-2em);
-        }
-        66% {
-            transform: translateY(-1em);
-        }
-    }
-
-    @keyframes run {
-        0% {
-            transform: rotate(0deg);
-        }
-        100% {
-            transform: rotate(360deg);
-        }
-    }
-
-    @media screen and (min-width: 500px) {
-        #ulcontainer {
-            height: 100%;
-            padding: 40px 0;
-        }
-        .picker {
-            position: static;
-            height: 0;
-            margin: 0;
-        }
-
-        .picker .imger {
-            position: absolute;
-            left: 0;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            max-width: 600px;
-            max-height: 600px;
-            margin: auto;
-        }
-
-        .imgblur{
-            background: none !important;
-        }
-    }
-
-    @media screen and (orientation: landscape) {
-        /*横屏*/
-        .picker .imger {
-            max-width: 80vh;
-            max-height: 80vh
-        }
-    }
-    </style>
+    <link rel="stylesheet" href="css/index.css">
 </head>
 
 <body>
     <audio hidden></audio>
     <div id="container">
+        <h1>&nbsp;<span></span>&nbsp;</h1>
         <div class="picker">
             <div class="imger">
             </div>
@@ -227,9 +29,8 @@
         </div>
     </div>
     <div class="imger-mask">图片蒙层 微信浏览器无法自动播放 需手动触发</div>
-    <div class="imgblur">
-        <!-- <img src="img/img1.jpg" alt="" width="100%" height="100%"> -->
-    </div>
+    <div class="imgblur"></div>
+
     <img src="img/min/img1.jpg" alt="" style="display: none">
     <img data-src="img/min/img2.jpg" alt="" style="display: none">
     <img data-src="img/min/img3.jpg" alt="" style="display: none">
@@ -240,6 +41,7 @@
     <script src="js/event.js"></script>
     <script>
     var audio, lyricContainer, lyric;
+    var title = document.querySelector('h1>span');
     var mask = document.querySelector('.mask-container');
     lyricContainer = document.querySelector('#container');
     var picker = document.querySelector('.picker');
@@ -260,7 +62,7 @@
             document.querySelector('.imger-mask').style.display = 'block';
             $('.imger-mask').tap(function() {
                 document.querySelector('.imger-mask').style.display = 'none';
-                $(imger).trigger('tap');
+                $(imger).trigger('tap');  
             })
         }
 
@@ -268,12 +70,9 @@
         init();
         loadImages(); //加载预留图片
 
-        audio.ontimeupdate = function(e) { //监听ontimeupdate事件
-            //遍历所有歌词，看哪句歌词的时间与当然时间吻合
+        audio.ontimeupdate = function(e) {
             for (var i = 0, l = lyric.length; i < l; i++) {
-                /*当前播放的时间*/
                 if (parseInt(this.currentTime) == parseInt(lyric[i][0])) {
-                    //显示到页面
                     $('ul li').removeClass('actived');
                     var li = $('ul li').eq(i);
                     li.addClass('actived');
@@ -285,39 +84,13 @@
         };
         audio.addEventListener('canplay', function() {
             if (isWX) return;
-            // alert('canplay');
+            // if (true) return;
             setTimeout(function() {
                 imger.classList.add('ani');
                 audio.play();
             }, 400)
         });
         audio.addEventListener('ended', turnSong); //播放结束自动切换
-
-        // picker.addEventListener('touchend', touch, false);
-        // picker.addEventListener('touchend', touch, false);
-
-        // function touch(e) {
-        //     var e = e || window.event;
-        //     switch (e.type) {
-        //         case "touchend":
-        //             if (flag) {
-        //                 flag = !flag;
-        //                 audio.pause();
-
-        //                var iTransform = getComputedStyle(img).transform;
-        //                var cTransform = getComputedStyle(picker).transform;
-
-        //                picker.style.transform = cTransform === 'none' ? iTransform : iTransform.concat(' ', cTransform);
-
-        //                 img.classList.remove('ani');
-        //             } else {
-        //                 flag = !flag;
-        //                 img.classList.add('ani');
-        //                 audio.play();
-        //             }
-        //             break;
-        //     }
-        // }
     }
 
     function parseLyric(text) {
@@ -373,6 +146,16 @@
         })
     }
 
+    function getTitle(id) {
+        var request = {
+            type: 'detail',
+            id: id
+        };
+        $.get('https://api.imjad.cn/cloudmusic/', request, function(data) {
+            title.textContent = data.songs[0].name
+        })
+    }
+
     function parseAudioSrc(id) {
         return 'http://music.163.com/song/media/outer/url?id=' + id + '.mp3'
     }
@@ -401,7 +184,12 @@
         imger.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
         imgblur.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
         init();
-        // audio.play();
+        if (isWX) {
+            setTimeout(function() {
+                imger.classList.add('ani');
+                audio.play();
+            }, 400)
+        }
     })
 
     $(lyricContainer).swipeRight(function() {
@@ -416,7 +204,12 @@
         imger.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
         imgblur.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
         init();
-        // audio.play();
+        if (isWX) {
+            setTimeout(function() {
+                imger.classList.add('ani');
+                audio.play();
+            }, 400)
+        }
     })
 
     $(imger).tap(function(e) {
@@ -437,6 +230,7 @@
     function init() {
         let rad = parseInt(Math.random() * songIds.length);
         audio.src = parseAudioSrc(songIds[rad]);
+        getTitle(songIds[rad]);
         getLrc(songIds[rad]);
     }
     </script>

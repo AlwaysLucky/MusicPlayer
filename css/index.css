@@ -1,0 +1,202 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-size: -webkit-calc(100% + 24 * (100vw - 500px) / 1400);
+    font-size: calc(100% + 24 * (100vw - 500px) / 1400);
+}
+
+#container {
+    height: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-align: center;
+    color: hsla(0, 0%, 100%, .6);
+    background-color: rgba(7, 17, 27, .5);
+}
+
+#ulcontainer {
+    height: -webkit-calc(100vh - 60vw - 9rem);
+    height: calc(100vh - 60vw - 9rem);
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+#container>h1{
+    /*line-height: 4rem;*/
+    /*margin: 0;*/
+}
+#container>h1 span{
+    letter-spacing: .4rem
+}
+ul {
+    padding: 0 20px;
+    line-height: 2;
+}
+
+ul li {
+    list-style: none;
+}
+
+.actived {
+    color: #fefefe;
+}
+
+.picker {
+    position: relative;
+    width: 60%;
+    height: 60vw;
+    font-size: 0;
+    margin: 2rem auto;/
+    /*margin: 0 auto 1rem auto;*/
+}
+
+.picker .imger {
+    height: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    border-radius: 50%;
+    background-image: url('../img/min/img1.jpg');
+    background-size: 100%;
+    background-position: center top;
+    transition: background .4s;
+    -webkit-filter: drop-shadow(0 1px 5px rgba(0, 0, 0, .5));
+    filter: drop-shadow(0 1px 5px rgba(0, 0, 0, .5));
+
+}
+
+.imger-mask {
+    position: absolute;
+    display: none;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    text-indent: -9999px;
+    background: rgba(0, 0, 0, .5) url(../img/min/play.png) no-repeat center/30%;
+}
+
+.picker .imger.ani {
+    -webkit-animation: run 30s .3s linear infinite;
+    animation: run 30s .3s linear infinite;
+}
+
+.picker .ani.stop {
+    -webkit-animation-play-state: paused;
+    animation-play-state: paused;
+}
+
+.swal-icon--custom img {
+    width: 25%;
+    border-radius: 50%;
+}
+
+.mask-container,
+.mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(7, 17, 27, .8);
+    color: #fff;
+}
+
+.mask {
+    background: none;
+    width: 100%;
+    height: 200px;
+    text-align: center;
+    line-height: 200px;
+    margin: auto;
+    font-size: 2em;
+}
+
+.imgblur {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-image: url(../img/min/img1.jpg);
+    background-repeat: no-repeat;
+    filter: blur(10px);
+    z-index: -1;
+}
+
+dot {
+    display: inline-block;
+    height: 1em;
+    line-height: 1;
+    text-align: left;
+    vertical-align: -.25em;
+    overflow: hidden;
+}
+
+dot:before {
+    display: block;
+    content: '...\A..\A.';
+    white-space: pre-wrap;
+    animation: dot 3s infinite step-start both;
+}
+
+@keyframes dot {
+    33% {
+        transform: translateY(-2em);
+    }
+    66% {
+        transform: translateY(-1em);
+    }
+}
+
+@keyframes run {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@media screen and (min-width: 500px) {
+    #ulcontainer {
+        height: 100%;
+        padding: 40px 0;
+    }
+    .picker {
+        position: static;
+        height: 0;
+        margin: 0;
+    }
+
+    .picker .imger {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        max-width: 600px;
+        max-height: 600px;
+        margin: auto;
+        z-index: -1;
+    }
+
+    .imgblur {
+        background: none !important;
+    }
+}
+
+@media screen and (orientation: landscape) {
+    /*横屏*/
+    .picker .imger {
+        max-width: 60vh;
+        max-height: 60vh
+    }
+}
