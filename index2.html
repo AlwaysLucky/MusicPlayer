@@ -238,6 +238,7 @@
     <script src="js/zepto.min.js"></script>
     <script src="js/touch.js"></script>
     <script src="js/event.js"></script>
+    <script src="js/wx.js"></script>
     <script>
     var audio, lyricContainer, lyric;
     var mask = document.querySelector('.mask-container');
@@ -252,17 +253,17 @@
     window.onload = function() {
         mask.style.display = "none"; //loading 动画隐藏
         /*微信浏览器处理*/
-        var ua = window.navigator.userAgent.toLowerCase();
-        var isIos = /(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent);
-        if (ua.match(/MicroMessenger/i) == 'micromessenger') {
-            flag = false;
-            isWX = true;
-            document.querySelector('.imger-mask').style.display = 'block';
-            $('.imger-mask').tap(function() {
-                document.querySelector('.imger-mask').style.display = 'none';
-                $(imger).trigger('tap');
-            })
-        }
+        // var ua = window.navigator.userAgent.toLowerCase();
+        // var isIos = /(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent);
+        // if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+        //     flag = false;
+        //     isWX = true;
+        //     document.querySelector('.imger-mask').style.display = 'block';
+        //     $('.imger-mask').tap(function() {
+        //         document.querySelector('.imger-mask').style.display = 'none';
+        //         $(imger).trigger('tap');
+        //     })
+        // }
 
         audio = document.querySelector('audio'); //获取页面上的audio标签
         init();
@@ -438,7 +439,32 @@
         let rad = parseInt(Math.random() * songIds.length);
         audio.src = parseAudioSrc(songIds[rad]);
         getLrc(songIds[rad]);
+        autoPlayAudio();
     }
+
+    function autoPlayAudio() {
+            wx.config({
+                // 配置信息, 即使不正确也能使用 wx.ready
+                debug: false,
+                appId: '',
+                timestamp: 1,
+                nonceStr: '',
+                signature: '',
+                jsApiList: []
+            });
+            wx.ready(function() {
+                audio.play();
+            });
+        }
+    /* for weixin */
+
+
+
+
+
+
+
+
     </script>
 </body>
 

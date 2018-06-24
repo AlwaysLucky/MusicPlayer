@@ -21,6 +21,13 @@
         <div id="ulcontainer">
             <ul></ul>
         </div>
+        <footer>
+            <div class="foot">
+                <span class="btn forward back"></span>
+                <span class="btn play"></span>
+                <span class="btn forward"></span>
+            </div>
+        </footer>
     </div>
     <div class="mask-container">
         <div class="mask">
@@ -39,6 +46,7 @@
     <script src="js/zepto.min.js"></script>
     <script src="js/touch.js"></script>
     <script src="js/event.js"></script>
+    <script src="js/wx.js"></script>
     <script>
     var audio, lyricContainer, lyric;
     var title = document.querySelector('h1>span');
@@ -47,6 +55,10 @@
     var picker = document.querySelector('.picker');
     var imger = document.querySelector('.imger');
     var imgblur = document.querySelector('.imgblur');
+    var back = $('.forward.back');
+    var play = $('.start')[0] == undefined ? $('.play') : $('.start');
+    var forward = $('.forward');
+
     var flag = true;
     var isWX = false;
     var songIds = ['29431066', '25638240', '27646198', '254574', '490602750', '202373', '35476049'];
@@ -57,12 +69,10 @@
         var ua = window.navigator.userAgent.toLowerCase();
         var isIos = /(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent);
         if (ua.match(/MicroMessenger/i) == 'micromessenger') {
-            flag = false;
+            // flag = false ;
             isWX = true;
-            document.querySelector('.imger-mask').style.display = 'block';
             $('.imger-mask').tap(function() {
-                document.querySelector('.imger-mask').style.display = 'none';
-                $(imger).trigger('tap');  
+                play.trigger('tap');
             })
         }
 
@@ -84,9 +94,9 @@
         };
         audio.addEventListener('canplay', function() {
             if (isWX) return;
-            // if (true) return;
             setTimeout(function() {
                 imger.classList.add('ani');
+                play.removeClass('start').addClass('play');
                 audio.play();
             }, 400)
         });
@@ -138,11 +148,12 @@
             var ul = document.createElement('ul');
             lyric.forEach(function(e, i) {
                 var li = document.createElement('li');
-                li.textContent = e[1];
-                ul.append(li);
+                // li.textContent = e[1]+"&nbsp;";
+                li.innerHTML = e[1]+"&nbsp;";
+                ul.appendChild(li);
             })
             document.querySelector('#ulcontainer').innerHTML = '';
-            document.querySelector('#ulcontainer').append(ul);
+            document.querySelector('#ulcontainer').appendChild(ul);
         })
     }
 
@@ -157,7 +168,7 @@
     }
 
     function parseAudioSrc(id) {
-        return 'http://music.163.com/song/media/outer/url?id=' + id + '.mp3'
+        return 'http://music.163.com/song/media/outer/url?id=' + id + '.mp3';
     }
 
     function loadImages() {
@@ -172,7 +183,28 @@
         $(lyricContainer).trigger('swipeLeft');
     }
 
-    $(lyricContainer).swipeLeft(function() {
+    // $(lyricContainer).swipeLeft(function() {
+    //     imger.classList.remove('ani');
+    //     var imgUrl = window.getComputedStyle(imger).backgroundImage;
+    //     var ptn = /(\w)+\.jpg/g;
+    //     var arr = ptn.exec(imgUrl);
+    //     var imgName = arr[0];
+    //     var imgNum = imgName.split('.')[0].split('img')[1];
+    //     if (imgNum == 5) imgNum = 0;
+    //     imgNum++;
+    //     imger.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
+    //     imgblur.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
+    //     init();
+    //     if (isWX) {
+    //         setTimeout(function() {
+    //             imger.classList.add('ani');
+    //             audio.play();
+    //         }, 400)
+    //     }
+    // })
+
+
+    forward.tap(function(){
         imger.classList.remove('ani');
         var imgUrl = window.getComputedStyle(imger).backgroundImage;
         var ptn = /(\w)+\.jpg/g;
@@ -192,7 +224,28 @@
         }
     })
 
-    $(lyricContainer).swipeRight(function() {
+
+    // $(lyricContainer).swipeRight(function() {
+    //     imger.classList.remove('ani');
+    //     var imgUrl = window.getComputedStyle(imger).backgroundImage;
+    //     var ptn = /(\w)+\.jpg/g;
+    //     var arr = ptn.exec(imgUrl);
+    //     var imgName = arr[0];
+    //     var imgNum = imgName.split('.')[0].split('img')[1];
+    //     if (imgNum == 1) imgNum = 5;
+    //     imgNum--;
+    //     imger.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
+    //     imgblur.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
+    //     init();
+    //     if (isWX) {
+    //         setTimeout(function() {
+    //             imger.classList.add('ani');
+    //             audio.play();
+    //         }, 400)
+    //     }
+    // })
+
+    back.tap(function(){
         imger.classList.remove('ani');
         var imgUrl = window.getComputedStyle(imger).backgroundImage;
         var ptn = /(\w)+\.jpg/g;
@@ -212,7 +265,7 @@
         }
     })
 
-    $(imger).tap(function(e) {
+    play.tap(function(e) {
         if (flag) {
             flag = !flag;
             audio.pause();
@@ -220,10 +273,12 @@
             var cTransform = getComputedStyle(picker).transform;
             picker.style.transform = cTransform === 'none' ? iTransform : iTransform.concat(' ', cTransform);
             imger.classList.remove('ani');
+            play.removeClass('play').addClass('start');
         } else {
             flag = !flag;
             imger.classList.add('ani');
             audio.play();
+            play.removeClass('start').addClass('play');
         }
     })
 
@@ -232,6 +287,23 @@
         audio.src = parseAudioSrc(songIds[rad]);
         getTitle(songIds[rad]);
         getLrc(songIds[rad]);
+        if (isWX) autoPlayAudio();
+    }
+
+    /* for weixin */
+    function autoPlayAudio() {
+        wx.config({
+            // 配置信息, 即使不正确也能使用 wx.ready
+            debug: false,
+            appId: '',
+            timestamp: 1,
+            nonceStr: '',
+            signature: '',
+            jsApiList: []
+        });
+        wx.ready(function() {
+            audio.play();
+        });
     }
     </script>
 </body>
