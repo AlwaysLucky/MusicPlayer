@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/6.0.0/normalize.min.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <!-- <link rel="stylesheet" href="css/woah.css"> -->
 </head>
 
 <body>
@@ -15,16 +17,15 @@
     <div id="container">
         <h1>&nbsp;<span></span>&nbsp;</h1>
         <div class="picker">
-            <div class="imger">
-            </div>
+            <div class="imger"></div>
         </div>
-        <div id="ulcontainer">
+        <div id="ulcontainer" class="woah shaker">
             <ul></ul>
         </div>
         <footer>
             <div class="foot">
                 <span class="btn forward back"></span>
-                <span class="btn play"></span>
+                <span class="btn start"></span>
                 <span class="btn forward"></span>
             </div>
         </footer>
@@ -35,20 +36,24 @@
             <dot>...</dot>
         </div>
     </div>
-    <div class="imger-mask">图片蒙层 微信浏览器无法自动播放 需手动触发</div>
     <div class="imgblur"></div>
-
+    <div class="words">
+        <ul class="sayword"></ul>
+    </div>
     <img src="img/min/img1.jpg" alt="" style="display: none">
     <img data-src="img/min/img2.jpg" alt="" style="display: none">
     <img data-src="img/min/img3.jpg" alt="" style="display: none">
     <img data-src="img/min/img4.jpg" alt="" style="display: none">
     <img data-src="img/min/img5.jpg" alt="" style="display: none">
     <script src="js/zepto.min.js"></script>
+    <script src="js/deferred.js"></script>
+    <script src="js/callback.js"></script>
     <script src="js/touch.js"></script>
     <script src="js/event.js"></script>
     <script src="js/wx.js"></script>
+    <script src="js/typed.js"></script>
     <script>
-    var audio, lyricContainer, lyric;
+    var audio, lyricContainer, lyric, words, typed, xx = 0;
     var title = document.querySelector('h1>span');
     var mask = document.querySelector('.mask-container');
     lyricContainer = document.querySelector('#container');
@@ -58,10 +63,11 @@
     var back = $('.forward.back');
     var play = $('.start')[0] == undefined ? $('.play') : $('.start');
     var forward = $('.forward');
-
     var flag = true;
     var isWX = false;
-    var songIds = ['29431066', '25638240', '27646198', '254574', '490602750', '202373', '35476049'];
+    var isSay = false;
+    var songIds = ['29431066', '27646198', '254574', '490602750', '202373', '35476049'];
+    var animations = ['bounceInLeft', 'fadeInLeft', 'rotateIn', 'rotateInDownLeft', 'slideInLeft', 'zoomInLeft', 'zoomInUp', 'flipInX', 'flipInY'];
 
     window.onload = function() {
         mask.style.display = "none"; //loading 动画隐藏
@@ -69,11 +75,8 @@
         var ua = window.navigator.userAgent.toLowerCase();
         var isIos = /(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent);
         if (ua.match(/MicroMessenger/i) == 'micromessenger') {
-            // flag = false ;
+            flag = false ;
             isWX = true;
-            $('.imger-mask').tap(function() {
-                play.trigger('tap');
-            })
         }
 
         audio = document.querySelector('audio'); //获取页面上的audio标签
@@ -101,6 +104,19 @@
             }, 400)
         });
         audio.addEventListener('ended', turnSong); //播放结束自动切换
+
+        $.ajax({
+            url: './js/words.txt',
+            type: 'GET',
+            dataType: 'application/text'
+        })
+        .done(function(data){
+            words = data.split('\n');
+        })
+        .fail(function(){
+            console.log('error');
+        })
+
     }
 
     function parseLyric(text) {
@@ -155,6 +171,9 @@
             document.querySelector('#ulcontainer').innerHTML = '';
             document.querySelector('#ulcontainer').appendChild(ul);
         })
+
+        /*引入zepto defferd 需单独引入 还需callback 配合*/
+        
     }
 
     function getTitle(id) {
@@ -180,29 +199,54 @@
     }
 
     function turnSong() {
-        $(lyricContainer).trigger('swipeLeft');
+        forward.trigger('tap');
     }
 
-    // $(lyricContainer).swipeLeft(function() {
-    //     imger.classList.remove('ani');
-    //     var imgUrl = window.getComputedStyle(imger).backgroundImage;
-    //     var ptn = /(\w)+\.jpg/g;
-    //     var arr = ptn.exec(imgUrl);
-    //     var imgName = arr[0];
-    //     var imgNum = imgName.split('.')[0].split('img')[1];
-    //     if (imgNum == 5) imgNum = 0;
-    //     imgNum++;
-    //     imger.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
-    //     imgblur.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
-    //     init();
-    //     if (isWX) {
-    //         setTimeout(function() {
-    //             imger.classList.add('ani');
-    //             audio.play();
-    //         }, 400)
-    //     }
-    // })
+    function sayWords(data){
+        var _data = data;
+        // var rad1 = parseInt(Math.random()*words.length); //随机产生words下标
+        // var rad2 = parseInt(Math.random()*animations.length); //随机产生animations下标
 
+        // var ul = document.querySelector('.words ul');
+        // var li = '<li class=\'animated '+animations[rad2]+'\'>'+words[rad1]+'</li>';
+        // ul.insertAdjacentHTML('afterbegin',li);
+
+        // var liLen = ul.querySelectorAll('li').length;
+        // var currentLi = ul.querySelector('li');
+
+        // currentLi.addEventListener('animationend',function(){
+        //     if ( liLen >= 3 ) {
+        //         var lastLi = ul.querySelector('li:last-child');
+        //         currentLi.parentNode.removeChild(lastLi);
+        //     }
+        //     sayWords(_data);
+        // })
+
+        var liArr = '';
+        data.forEach(function(e,i){
+            liArr+= '<li>'+e+'</li>';
+        })
+        var ani = setInterval(scrollWords,35); //number: 滚动速度
+        typed = new Typed(".sayword", {
+            strings: [liArr],
+            typeSpeed: 20, //打字速度
+            contentType: 'html',
+            onComplete: function(self){
+                console.log('complete');
+                (function(i){
+                    setTimeout(function(){
+                        clearInterval(i); //延迟清除定时器 防止过早清除而滚动未结束
+                    },20000)
+                })(ani)
+            }
+        })
+    }
+
+    function scrollWords(xxx){
+        var words = document.querySelector('.words');
+        words.scrollTo(0,xx);
+        xx++;
+    }
 
     forward.tap(function(){
         imger.classList.remove('ani');
@@ -219,36 +263,16 @@
         if (isWX) {
             setTimeout(function() {
                 imger.classList.add('ani');
-                audio.play();
+                // audio.play();
+                autoPlayAudio();
             }, 400)
         }
     })
 
-
-    // $(lyricContainer).swipeRight(function() {
-    //     imger.classList.remove('ani');
-    //     var imgUrl = window.getComputedStyle(imger).backgroundImage;
-    //     var ptn = /(\w)+\.jpg/g;
-    //     var arr = ptn.exec(imgUrl);
-    //     var imgName = arr[0];
-    //     var imgNum = imgName.split('.')[0].split('img')[1];
-    //     if (imgNum == 1) imgNum = 5;
-    //     imgNum--;
-    //     imger.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
-    //     imgblur.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
-    //     init();
-    //     if (isWX) {
-    //         setTimeout(function() {
-    //             imger.classList.add('ani');
-    //             audio.play();
-    //         }, 400)
-    //     }
-    // })
-
     back.tap(function(){
         imger.classList.remove('ani');
         var imgUrl = window.getComputedStyle(imger).backgroundImage;
-        var ptn = /(\w)+\.jpg/g;
+        var ptn = /(\w)+\.jpg|png|jpeg|gif/g;
         var arr = ptn.exec(imgUrl);
         var imgName = arr[0];
         var imgNum = imgName.split('.')[0].split('img')[1];
@@ -260,7 +284,8 @@
         if (isWX) {
             setTimeout(function() {
                 imger.classList.add('ani');
-                audio.play();
+                // audio.play();
+                autoPlayAudio();
             }, 400)
         }
     })
@@ -269,6 +294,9 @@
         if (flag) {
             flag = !flag;
             audio.pause();
+            if (isSay) {
+                typed.stop();
+            }
             var iTransform = getComputedStyle(imger).transform;
             var cTransform = getComputedStyle(picker).transform;
             picker.style.transform = cTransform === 'none' ? iTransform : iTransform.concat(' ', cTransform);
@@ -278,8 +306,14 @@
             flag = !flag;
             imger.classList.add('ani');
             audio.play();
+            if (isSay) {
+                typed.start();
+            }
             play.removeClass('start').addClass('play');
         }
+        if (isSay) return;
+        sayWords(words);
+        isSay = true;
     })
 
     function init() {
@@ -287,7 +321,6 @@
         audio.src = parseAudioSrc(songIds[rad]);
         getTitle(songIds[rad]);
         getLrc(songIds[rad]);
-        if (isWX) autoPlayAudio();
     }
 
     /* for weixin */

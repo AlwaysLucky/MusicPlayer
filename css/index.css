@@ -11,7 +11,7 @@ body {
 
 body {
     font-size: -webkit-calc(100% + 24 * (100vw - 500px) / 1500);
-    font-size: calc(100% + 24 * (100vw - 500px) / 1500);
+    font-size: calc(100% + 24 * (100vw - 500px) / 1500);    
 }
 
 #container {
@@ -32,10 +32,12 @@ body {
 #container>h1{
     /*line-height: 4rem;*/
     /*margin: 0;*/
+    font-size: 1.6rem;
 }
 #container>h1 span{
     letter-spacing: .4rem
 }
+
 ul {
     padding: 0 20px;
     line-height: 2;
@@ -50,12 +52,11 @@ ul li {
 }
 
 .picker {
-    position: relative;
+    /*position: relative;*/
     width: 60%;
     height: 60vw;
     font-size: 0;
-    margin: 2rem auto;/
-    /*margin: 0 auto 1rem auto;*/
+    margin: 2rem auto;
 }
 
 .picker .imger {
@@ -72,17 +73,6 @@ ul li {
     /*-webkit-filter: drop-shadow(0 1px 5px rgba(0, 0, 0, .5));*/
     /*filter: drop-shadow(0 1px 5px rgba(0, 0, 0, .5));*/
 
-}
-
-.imger-mask {
-    position: absolute;
-    display: none;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    text-indent: -9999px;
-    background: rgba(0, 0, 0, .5) url(../img/min/play.png) no-repeat center/30%;
 }
 
 .picker .imger.ani {
@@ -173,7 +163,6 @@ ul li {
     /*(100-40)/2 - 20/2*/
     background: linear-gradient(135deg, currentColor, currentColor 50%, hsla(0, 0%, 100%, 0) 50%) no-repeat center;
     transform: rotate(135deg);
-    /*transform-origin: 50% 50%;*/
 }
 
 .forward:before,
@@ -206,6 +195,20 @@ ul li {
 
 .foot span:nth-child(2){
     margin: 20px 20px 0;
+}
+
+.words{
+    position: absolute;
+    top: 4rem;
+    left: 0;
+    z-index: 0;
+    height: -webkit-calc(60vw + 2rem);
+    height: calc(60vw + 2rem);
+    overflow: auto
+}
+
+.words ul li{
+    color: hsla(0, 0%, 100%, .6);
 }
 
 dot {
