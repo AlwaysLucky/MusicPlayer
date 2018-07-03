@@ -18,15 +18,16 @@
         <h1>&nbsp;<span></span>&nbsp;</h1>
         <div class="picker">
             <div class="imger"></div>
+            <div class="imger-mask"></div>
         </div>
         <div id="ulcontainer" class="woah shaker">
             <ul></ul>
         </div>
         <footer>
             <div class="foot">
-                <span class="btn forward back"></span>
+                <span class="btn forward back" id="back"></span>
                 <span class="btn start"></span>
-                <span class="btn forward"></span>
+                <span class="btn forward" id="forward"></span>
             </div>
         </footer>
     </div>
@@ -60,12 +61,14 @@
     var picker = document.querySelector('.picker');
     var imger = document.querySelector('.imger');
     var imgblur = document.querySelector('.imgblur');
-    var back = $('.forward.back');
+    var wordser = document.querySelector('.words');
+    var back = $('#back');
     var play = $('.start')[0] == undefined ? $('.play') : $('.start');
-    var forward = $('.forward');
+    var forward = $('#forward');
     var flag = true;
     var isWX = false;
     var isSay = false;
+    var isSayOk = true;
     var songIds = ['29431066', '27646198', '254574', '490602750', '202373', '35476049'];
     var animations = ['bounceInLeft', 'fadeInLeft', 'rotateIn', 'rotateInDownLeft', 'slideInLeft', 'zoomInLeft', 'zoomInUp', 'flipInX', 'flipInY'];
 
@@ -164,7 +167,6 @@
             var ul = document.createElement('ul');
             lyric.forEach(function(e, i) {
                 var li = document.createElement('li');
-                // li.textContent = e[1]+"&nbsp;";
                 li.innerHTML = e[1]+"&nbsp;";
                 ul.appendChild(li);
             })
@@ -224,15 +226,17 @@
 
         var liArr = '';
         data.forEach(function(e,i){
-            liArr+= '<li>'+e+'</li>';
+            liArr+= '<li>'+e+'</li>^400';
         })
-        var ani = setInterval(scrollWords,35); //number: 滚动速度
+        var ani = setInterval(scrollWords,55); //number: 滚动速度
         typed = new Typed(".sayword", {
             strings: [liArr],
+            startDelay: 4000,
             typeSpeed: 20, //打字速度
             contentType: 'html',
             onComplete: function(self){
                 console.log('complete');
+                isSayOk = false ;
                 (function(i){
                     setTimeout(function(){
                         clearInterval(i); //延迟清除定时器 防止过早清除而滚动未结束
@@ -243,12 +247,15 @@
     }
 
     function scrollWords(xxx){
-        var words = document.querySelector('.words');
-        words.scrollTo(0,xx);
+        wordser.scrollTo(0,xx);
         xx++;
     }
 
     forward.tap(function(){
+        if (isSay && isSayOk) {
+            alert('故事还要继续');
+            return ;
+        }
         imger.classList.remove('ani');
         var imgUrl = window.getComputedStyle(imger).backgroundImage;
         var ptn = /(\w)+\.jpg/g;
@@ -263,13 +270,16 @@
         if (isWX) {
             setTimeout(function() {
                 imger.classList.add('ani');
-                // audio.play();
                 autoPlayAudio();
             }, 400)
         }
     })
 
     back.tap(function(){
+        if (isSay && isSayOk) {
+            alert('往事不必回首');
+            return ;
+        }
         imger.classList.remove('ani');
         var imgUrl = window.getComputedStyle(imger).backgroundImage;
         var ptn = /(\w)+\.jpg|png|jpeg|gif/g;
@@ -284,7 +294,6 @@
         if (isWX) {
             setTimeout(function() {
                 imger.classList.add('ani');
-                // audio.play();
                 autoPlayAudio();
             }, 400)
         }
