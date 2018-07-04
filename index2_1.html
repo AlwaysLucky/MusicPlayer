@@ -53,6 +53,7 @@
     <script src="js/event.js"></script>
     <script src="js/wx.js"></script>
     <script src="js/typed.js"></script>
+    <script src="js/sweetalert.min.js"></script>
     <script>
     var audio, lyricContainer, lyric, words, typed, xx = 0;
     var title = document.querySelector('h1>span');
@@ -235,11 +236,29 @@
             typeSpeed: 20, //打字速度
             contentType: 'html',
             onComplete: function(self){
-                console.log('complete');
+                console.log('words is complete output');
                 isSayOk = false ;
                 (function(i){
                     setTimeout(function(){
                         clearInterval(i); //延迟清除定时器 防止过早清除而滚动未结束
+                        swal({
+                            title: "XX同学(标题)",
+                            text: "路途遥远 我们在一起吧!(这里是你要说的话)",
+                            icon: "img/img1.jpg",
+                            buttons: ['残忍拒绝','咱俩没戏'],
+                            dangerMode: true,
+                        })
+                        .then((willDelete) => {
+                            if (willDelete) {
+                                swal("不存在的!", {
+                                    icon: "success",
+                                });
+                                wordser.innerHTML = '';
+                            } else {
+                                swal("那是不可能的!");
+                                wordser.innerHTML = '';
+                            }
+                        });
                     },20000)
                 })(ani)
             }

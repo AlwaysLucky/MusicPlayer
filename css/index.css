@@ -218,6 +218,11 @@ ul li {
     color: hsla(0, 0%, 100%, .6);
 }
 
+.swal-icon--custom img{
+        width: 25%;
+        border-radius: 50%;
+    }
+
 dot {
     display: inline-block;
     height: 1em;
