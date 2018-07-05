@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/animate.css">
-    <!-- <link rel="stylesheet" href="css/woah.css"> -->
 </head>
 
 <body>
@@ -26,7 +25,7 @@
         <footer>
             <div class="foot">
                 <span class="btn forward back" id="back"></span>
-                <span class="btn start"></span>
+                <span class="btn start" id="start"></span>
                 <span class="btn forward" id="forward"></span>
             </div>
         </footer>
@@ -64,7 +63,7 @@
     var imgblur = document.querySelector('.imgblur');
     var wordser = document.querySelector('.words');
     var back = $('#back');
-    var play = $('.start')[0] == undefined ? $('.play') : $('.start');
+    var play = $('#start')[0] == undefined ? $('.play') : $('#start');
     var forward = $('#forward');
     var flag = true;
     var isWX = false;
@@ -360,12 +359,29 @@
             timestamp: 1,
             nonceStr: '',
             signature: '',
-            jsApiList: []
+            jsApiList: []   
         });
         wx.ready(function() {
             audio.play();
         });
     }
+
+    /* for PC */
+    if(!/Android|webOS|iPhone|iPad|BlackBerry/i.test(navigator.userAgent)) {
+        $('footer').on('click','span',function(){
+            var id = this.id;
+            if (id == 'forward') {
+                forward.trigger('tap');
+            }
+            if (id == 'start') {
+                play.trigger('tap');
+            }
+            if (id == 'back') {
+                back.trigger('tap');
+            }
+        })
+    }
+
     </script>
 </body>
 

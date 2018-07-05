@@ -5,17 +5,19 @@
 
 html,
 body {
-    height: 100%;
+    /*height: 100%;*/
     overflow: hidden;
 }
 
 body {
-    font-size: -webkit-calc(100% + 24 * (100vw - 500px) / 1500);
-    font-size: calc(100% + 24 * (100vw - 500px) / 1500);    
+    /*font-size: -webkit-calc(100% + 24 * (100vw - 500px) / 1500);*/
+    /*font-size: calc(100% + 24 * (100vw - 500px) / 1500);*/
+
+    font-size: 87.5%
 }
 
 #container {
-    height: 100%;
+    /*height: 100%;*/
     box-sizing: border-box;
     overflow: hidden;
     text-align: center;
@@ -24,15 +26,12 @@ body {
 }
 
 #ulcontainer {
-    height: -webkit-calc(100vh - 60vw - 15rem);
-    height: calc(100vh - 60vw - 15rem); /*9-15*/
+    height: -webkit-calc(100vh - 60vw - 2em - 0.67em*2 - 9rem - 3px); /* 11.67 = 2em + 0.67 + 60vw + 4rem +5rem */
+    height:         calc(100vh - 60vw - 2em - 0.67em*2 - 9rem - 3px);
     overflow-x: hidden;
     overflow-y: scroll;
 }
 #container>h1{
-    /*line-height: 4rem;*/
-    /*margin: 0;*/
-    font-size: 1.6rem;
 }
 #container>h1 span{
     letter-spacing: .4rem
@@ -53,25 +52,28 @@ ul li {
 
 .picker {
     position: relative;
-    width: 60%;
-    height: 60vw;
+    width: 60%; 
+    /*max-width: 400px;*/
+    /*max-height: 400px;*/
     font-size: 0;
     margin: 2rem auto;
 }
 
 .picker .imger-mask{
     position: absolute;
-    width: 100%;
-    height: 100%;
+    /*width: 100%;*/
+    /*height: 100%;*/
+    padding: 50%; /*正方形 相比width height 同时开工 简洁 */
     left: 0;
     top: 0;
     border-radius: 100%;
     background-color: rgba(7, 17, 27, .2);
 }
 .picker .imger {
-    height: 100%;
-    box-sizing: border-box;
-    overflow: hidden;
+    /*height: 100%;*/
+    padding: 50%; /* 正方形 */
+    /*box-sizing: border-box;*/
+    /*overflow: hidden;*/
     border-radius: 50%;
     background-image: url('../img/min/img1.jpg');
     background-size: 100%;
@@ -126,6 +128,7 @@ ul li {
     bottom: 0;
     background-image: url(../img/min/img1.jpg);
     background-repeat: no-repeat;
+    background-size: cover;
     filter: blur(10px);
     z-index: -1;
 }
@@ -134,9 +137,10 @@ ul li {
 
 .btn {
     display: inline-block;
-    width: 80px;
-    height: 80px;
-    /*border: 10px solid;*/
+    /*width: 80px;*/
+    width: 5rem;
+    /*height: 80px;*/
+    height: 5rem;
     border-radius: 100%;
     color: #ff9b00;
     color: rgba(255,155,0,.8);
@@ -199,9 +203,12 @@ ul li {
 .back {
     transform: rotate(-180deg);
 }
+.foot{
+    font-size: 0;
+}
 
 .foot span:nth-child(2){
-    margin: 20px 20px 0;
+    margin: 0 20px;
 }
 
 .words{
@@ -257,7 +264,21 @@ dot:before {
     }
 }
 
-@media screen and (min-width: 500px) {
+@media screen and (min-width: 500px){
+   .picker{
+        max-width: 400px
+   }
+    
+   #ulcontainer {
+       height: -webkit-calc(100vh - 400px - 2em - 0.67em*2 - 9rem - 3px);
+       height:         calc(100vh - 400px - 2em - 0.67em*2 - 9rem - 3px);
+   }
+
+}
+
+
+
+/*@media screen and (min-width: 500px) {
     #ulcontainer {
         height: 100%;
         padding: 40px 0;
@@ -285,10 +306,10 @@ dot:before {
     }
 }
 
-@media screen and (orientation: landscape) {
-    /*横屏*/
+/*横屏*/
+/*@media screen and (orientation: landscape) {
     .picker .imger {
         max-width: 60vh;
         max-height: 60vh
     }
-}
+}*/
