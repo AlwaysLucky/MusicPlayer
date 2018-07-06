@@ -231,7 +231,7 @@
         var ani = setInterval(scrollWords,55); //number: 滚动速度
         typed = new Typed(".sayword", {
             strings: [liArr],
-            startDelay: 4000,
+            startDelay: 1000,
             typeSpeed: 20, //打字速度
             contentType: 'html',
             onComplete: function(self){
@@ -380,6 +380,7 @@
                 back.trigger('tap');
             }
         })
+        document.querySelector('#ulcontainer').style.overflow = 'hidden'
     }
 
     </script>

@@ -28,8 +28,8 @@ body {
 #ulcontainer {
     height: -webkit-calc(100vh - 60vw - 2em - 0.67em*2 - 9rem - 3px); /* 11.67 = 2em + 0.67 + 60vw + 4rem +5rem */
     height:         calc(100vh - 60vw - 2em - 0.67em*2 - 9rem - 3px);
-    overflow-x: hidden;
-    overflow-y: scroll;
+    /*overflow-x: hidden;*/
+    overflow-y: auto;
 }
 #container>h1{
 }
