@@ -205,24 +205,6 @@
 
     function sayWords(data){
         var _data = data;
-        // var rad1 = parseInt(Math.random()*words.length); //随机产生words下标
-        // var rad2 = parseInt(Math.random()*animations.length); //随机产生animations下标
-
-        // var ul = document.querySelector('.words ul');
-        // var li = '<li class=\'animated '+animations[rad2]+'\'>'+words[rad1]+'</li>';
-        // ul.insertAdjacentHTML('afterbegin',li);
-
-        // var liLen = ul.querySelectorAll('li').length;
-        // var currentLi = ul.querySelector('li');
-
-        // currentLi.addEventListener('animationend',function(){
-        //     if ( liLen >= 3 ) {
-        //         var lastLi = ul.querySelector('li:last-child');
-        //         currentLi.parentNode.removeChild(lastLi);
-        //     }
-        //     sayWords(_data);
-        // })
-
         var liArr = '';
         data.forEach(function(e,i){
             liArr+= '<li>'+e+'</li>^400';
