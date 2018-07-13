@@ -19,7 +19,7 @@
             <div class="imger"></div>
             <div class="imger-mask"></div>
         </div>
-        <div id="ulcontainer" class="woah shaker">
+        <div id="ulcontainer">
             <ul></ul>
         </div>
         <footer>
@@ -70,7 +70,6 @@
     var isSay = false;
     var isSayOk = true;
     var songIds = ['29431066', '27646198', '254574', '490602750', '202373', '35476049'];
-    var animations = ['bounceInLeft', 'fadeInLeft', 'rotateIn', 'rotateInDownLeft', 'slideInLeft', 'zoomInLeft', 'zoomInUp', 'flipInX', 'flipInY'];
 
     window.onload = function() {
         mask.style.display = "none"; //loading 动画隐藏
@@ -240,24 +239,25 @@
                 (function(i){
                     setTimeout(function(){
                         clearInterval(i); //延迟清除定时器 防止过早清除而滚动未结束
-                        swal({
-                            title: "XX同学(标题)",
-                            text: "路途遥远 我们在一起吧!(这里是你要说的话)",
-                            icon: "img/img1.jpg",
-                            buttons: ['残忍拒绝','咱俩没戏'],
-                            dangerMode: true,
-                        })
-                        .then((willDelete) => {
-                            if (willDelete) {
-                                swal("不存在的!", {
-                                    icon: "success",
-                                });
-                                wordser.innerHTML = '';
-                            } else {
-                                swal("那是不可能的!");
-                                wordser.innerHTML = '';
-                            }
-                        });
+                        wordser.innerHTML = ''; //清空words
+                        // swal({
+                        //     title: "XX同学",
+                        //     text: "路途遥远 我们在一起吧!",
+                        //     icon: "img/img1.jpg",
+                        //     buttons: ['残忍拒绝','咱俩没戏'],
+                        //     dangerMode: true,
+                        // })
+                        // .then((willDelete) => {
+                        //     if (willDelete) {
+                        //         swal("不存在的!", {
+                        //             icon: "success",
+                        //         });
+                        //         wordser.innerHTML = '';
+                        //     } else {
+                        //         swal("那是不可能的!");
+                        //         wordser.innerHTML = '';
+                        //     }
+                        // });
                     },20000)
                 })(ani)
             }
@@ -271,7 +271,7 @@
 
     forward.tap(function(){
         if (isSay && isSayOk) {
-            alert('故事还要继续');
+            alert('不要着急走嘛~');
             return ;
         }
         imger.classList.remove('ani');
@@ -295,7 +295,7 @@
 
     back.tap(function(){
         if (isSay && isSayOk) {
-            alert('往事不必回首');
+            alert('不要着急走嘛~');
             return ;
         }
         imger.classList.remove('ani');
