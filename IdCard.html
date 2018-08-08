@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>idcard</title>
+</head>
+<body>
+	<!-- <iframe src="http://apis.juhe.cn/idcard/index?cardno=412725199311122238&dtype=json&key=344ec543e42b76bb5fb5cc95dfc642a2" frameborder="0"></iframe> -->
+	
+	<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script>
+
+		window.load_func = function(data){
+			console.log('load_func is started');
+			console.log(data);
+			console.log('load_func is ended');
+		}
+
+		var request = {
+			cardno: '412725199311122238',
+			dtype: 'json',
+			key: '344ec543e42b76bb5fb5cc95dfc642a2'
+		};
+
+		
+		$.ajax({
+			url: 'http://apis.juhe.cn/idcard/index',
+			type: 'get',
+			data: request,
+			dataType: 'jsonp',
+			jsonp: 'callback',
+			jsonpCallback:'load_func',
+			async: true
+		}).done(function(data){
+			console.log(data);
+			document.body.innerHTML = JSON.stringify(data.result);
+		}).error(function(msg){
+			console.log("msg"+msg);
+		})
+
+
+	</script>
+</body>
+</html>
