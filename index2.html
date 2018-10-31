@@ -372,6 +372,18 @@
             document.querySelector('#ulcontainer').innerHTML = '';
             document.querySelector('#ulcontainer').append(ul);
         })
+
+
+
+        fetch('https://api.imjad.cn/cloudmusic/?type=lyric&id='+id)
+          .then(function(response) {
+            response.json().then(function(obj){
+                console.log(obj.lrc.lyric);
+            })
+          })
+          .then(function(myJson) {
+            console.log(myJson);
+          });
     }
 
     function parseAudioSrc(id) {
