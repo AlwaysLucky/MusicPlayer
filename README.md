@@ -12,5 +12,5 @@
 * 播放/前进/后退按钮无图片实现
 * 音乐API: https://zhuanlan.zhihu.com/p/30246788
 
-## 在线地址 [www.qinxiaoli.com/xiaoli.html](http://www.qinxiaoli.com/xiaoli.html)
+## 在线地址 [www.qinxiaoli.com/xiaoli.html](http://www.qinxiaoli.com)
 ![img](./static/image/visit-musicplayer.png)
