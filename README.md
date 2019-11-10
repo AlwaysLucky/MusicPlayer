@@ -9,5 +9,7 @@
 * better-scroll
 * sweetAlert
 * 基本适配了移动+pc 兼容未做详细测试
-* 播放/前进/后退按钮无图片实现
+* 播放/前进/后退按钮使用渐变实现
 * 音乐API: https://zhuanlan.zhihu.com/p/30246788
+
+* [*线上地址*](https://diaosi19.com/xiaoli/)
