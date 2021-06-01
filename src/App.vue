@@ -28,7 +28,7 @@ export default {
       autoPlay: false,
       words: [],
       songsId: ['29431066', '27646198', '254574', '490602750', '202373', '35476049', '29567188', '534540557', '513791211'],
-      gallery: ['../static/image/img1.jpg', '../static/image/img2.jpg', '../static/image/img3.jpg', '../static/image/img4.jpg', '../static/image/img5.jpg']
+      gallery: [require('../static/image/img1.jpg'), require('../static/image/img2.jpg'), require('../static/image/img3.jpg'), require('../static/image/img4.jpg'), require('../static/image/img5.jpg')]
     };
   },
   components: {
