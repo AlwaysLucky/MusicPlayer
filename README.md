@@ -12,4 +12,4 @@
 * 播放/前进/后退按钮使用渐变实现
 * 音乐API: https://zhuanlan.zhihu.com/p/30246788
 
-* [*线上地址*](https://diaosi19.com/xiaoli/)
+* [*线上地址*](https://diaosi19.com/MusicPlayer/)
